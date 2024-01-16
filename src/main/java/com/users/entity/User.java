@@ -29,4 +29,8 @@ public class User {
     @Column(nullable = false)
     private Boolean disabled;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
 }

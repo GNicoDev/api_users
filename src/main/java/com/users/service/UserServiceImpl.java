@@ -12,6 +12,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    UserSecurityService userSecurityService;
+
     @Override
     public List<User> listAllUsers() {
         return userRepository.findAll();
@@ -24,6 +27,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<User> createUser(User user) {
+        String hashedPassword = userSecurityService.hashPassword(user.getPassword());
+        user.setPassword(hashedPassword);
         return Optional.of(userRepository.save(user));
     }
 
