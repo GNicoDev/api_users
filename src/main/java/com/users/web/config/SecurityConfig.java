@@ -1,18 +1,18 @@
 package com.users.web.config;
 
-import com.users.entity.Role;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -25,12 +25,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
+                        "/api/auth/**").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
                         HttpMethod.GET,"/api/users/*").permitAll())
-                                                                       //"/api/users/*": only we can access to all request GET
-                                                                        // that are after users/ in the first level. NO ACCESS to /api/users/listbyemail/nico@gmail.com
-
-                                                                        //"/api/users/**": we can access to all request GET
-                                                                      // that are after users/ . ACCESS to /api/users/listbyemail/nico@gmail.com
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
                         HttpMethod.GET,"/api/users/**").hasAnyRole("ADMIN","USER"))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
@@ -41,6 +38,10 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
+    }
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
