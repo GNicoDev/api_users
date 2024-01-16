@@ -33,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
         //1. Validate that it's a valid Header Authorization
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if(authHeader == null || authHeader.isEmpty() || authHeader.startsWith("Bearer")){
+        if(authHeader == null || authHeader.isEmpty() || !authHeader.startsWith("Bearer")){
             filterChain.doFilter(request,response);
             return;
         }
@@ -56,6 +56,7 @@ public class JwtFilter extends OncePerRequestFilter {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        System.out.println(authenticationToken);
         filterChain.doFilter(request,response);
 
     }
