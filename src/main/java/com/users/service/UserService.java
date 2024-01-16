@@ -12,8 +12,8 @@ public interface UserService {
 
     Optional<User> createUser(User user);
 
-    Optional<User> updateUser(User user, Long id);
+    Optional<User> updateUser(User user, String id);
 
-    void deleteUser (Long id);
+    void deleteUser (String id);
 
 }

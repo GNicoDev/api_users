@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PutMapping("update/{id}")
-    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable Long id){
+    public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable String id){
         Optional<User> optionalUser = userService.updateUser(user, id);
         if (optionalUser.isPresent())
             return ResponseEntity.ok(optionalUser.get());
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id){
+    public ResponseEntity<?> deleteUser(@PathVariable String id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

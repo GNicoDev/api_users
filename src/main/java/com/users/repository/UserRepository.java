@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User,String> {
     @Query(value = "SELECT p FROM User p WHERE p.email LIKE %:email%")
     Optional<User> findByEmail (@Param("email") String email);
 }

@@ -12,23 +12,21 @@ import lombok.*;
 @Builder
 public class User {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false,length = 20, unique = true)
+    private String userName;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false, length = 200)
+    private String password;
 
-    @Column(nullable = false)
-    private String surname;
-
-    @Column(unique = true,nullable = false)
+    @Column(unique = true,nullable = false,length = 30)
     private String email;
 
     @Column(nullable = false)
-    private String password;
+    private Boolean locked;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private Role role;
+    private Boolean disabled;
+
 }
