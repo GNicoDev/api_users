@@ -17,17 +17,20 @@ public class User {
     @Column(nullable = false,length = 20, unique = true)
     private String userName;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 250)
     private String password;
 
     @Column(unique = true,nullable = false,length = 30)
     private String email;
 
-    @Column(nullable = false)
-    private Boolean locked;
+    @Enumerated(EnumType.STRING)
+    private Role role = Role.USER;
 
     @Column(nullable = false)
-    private Boolean disabled;
+    private Boolean locked = false;
+
+    @Column(nullable = false)
+    private Boolean disabled = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -37,6 +37,8 @@ public class SecurityConfig {
                         HttpMethod.POST,"/api/users/**").hasRole("ADMIN"))
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
                         HttpMethod.PUT,"/api/users/**").hasRole("ADMIN"))
+                .authorizeHttpRequests(auth -> auth.requestMatchers(
+                        HttpMethod.DELETE,"/api/users/**").hasRole("ADMIN"))
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());
 

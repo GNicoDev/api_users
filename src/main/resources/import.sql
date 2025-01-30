@@ -1,0 +1,1 @@
+INSERT INTO users (user_name,password,email,role,disabled,locked) VALUES ("admin", "$2y$10$mko8aNnSlu6S5XmjMLKKg.hcvedUA88..DSYEGe4331mbXrxqvxS.", "admin@gmail.com", "ADMIN", false, false);
