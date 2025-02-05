@@ -12,17 +12,17 @@ import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/users/")
+@RequestMapping("api/")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("list")
+    @GetMapping("users")
     public ResponseEntity<?> listAllUsers(){
         return ResponseEntity.ok(userService.listAllUsers());
     }
 
-    @GetMapping("listbyemail/{email}")
+    @GetMapping("users/{email}")
     public ResponseEntity<?> findUserByEmail(@PathVariable String email){
         Optional<User> optionalUser = userService.findUserByEmail(email);
         if (optionalUser.isPresent())
@@ -30,7 +30,7 @@ public class UserController {
         return ResponseEntity.badRequest().body("email not exist ");
     }
 
-    @PostMapping("create")
+    @PostMapping("users")
     public ResponseEntity<?> createNewUser (@RequestBody User user) throws URISyntaxException {
         Optional<User> optionalUser = userService.createUser(user);
         if (optionalUser.isPresent())
@@ -38,7 +38,7 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("users/{id}")
     public ResponseEntity<?> updateUser(@RequestBody User user, @PathVariable String id){
         Optional<User> optionalUser = userService.updateUser(user, id);
         if (optionalUser.isPresent())
@@ -46,7 +46,7 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable String id){
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
