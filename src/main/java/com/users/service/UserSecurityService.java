@@ -3,11 +3,15 @@ package com.users.service;
 import com.users.entity.User;
 import com.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 public class UserSecurityService implements UserDetailsService {
@@ -23,10 +27,12 @@ public class UserSecurityService implements UserDetailsService {
         User user = userRepository.findById(username)
                 .orElseThrow(()->new UsernameNotFoundException("User" + username + "not found"));
 
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
+
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUserName())
                 .password(user.getPassword())
-                .roles(user.getRole().name())
+                .authorities(Collections.singletonList(authority))
                 .accountLocked(user.getLocked())
                 .disabled(user.getDisabled())
                 .build();

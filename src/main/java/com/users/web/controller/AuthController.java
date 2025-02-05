@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.GrantedAuthority;
+
 
 @RestController
 @RequestMapping ("/api/auth")
@@ -34,7 +36,11 @@ public class AuthController {
         System.out.println(authentication.isAuthenticated());
         System.out.println(authentication.getPrincipal());
 
-        String jwt = jwtUtil.create(loginDto.getUsername());
+        String role = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("USER");
+        String jwt = jwtUtil.create(loginDto.getUsername(), role);
 
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
     }
