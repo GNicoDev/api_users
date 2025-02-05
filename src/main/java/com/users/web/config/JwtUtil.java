@@ -14,7 +14,8 @@ public class JwtUtil {
     private static String SECRET_KEY = "GNicoDev";
     private static Algorithm ALGORITHM = Algorithm.HMAC256(SECRET_KEY);
 
-    public String create(String username, String role){
+    public String create(String username, String role) {
+        System.out.println("Rol desde create JwtUtil" + role);
         return JWT.create()
                 .withSubject(username)
                 .withIssuer("GNIcoDev")
@@ -24,21 +25,28 @@ public class JwtUtil {
                 .sign(ALGORITHM);
     }
 
-    public boolean isValid (String jwt){
+    public boolean isValid(String jwt) {
         try {
             JWT.require(ALGORITHM)
                     .build()
                     .verify(jwt);
             return true;
-        }catch (JWTVerificationException e){
+        } catch (JWTVerificationException e) {
             return false;
         }
     }
 
-    public String getUsername (String jwt){
+    public String getUsername(String jwt) {
         return JWT.require(ALGORITHM)
                 .build()
                 .verify(jwt)
                 .getSubject();
+    }
+
+    public String getRole(String jwt) {
+        return JWT.require(ALGORITHM)
+                .build()
+                .verify(jwt)
+                .getClaim("role").asString();
     }
 }

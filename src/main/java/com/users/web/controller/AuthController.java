@@ -40,6 +40,8 @@ public class AuthController {
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElse("USER");
+        System.out.println("Desde authController login-> Role : " + role);
+
         String jwt = jwtUtil.create(loginDto.getUsername(), role);
 
         return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
