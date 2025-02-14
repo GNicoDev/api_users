@@ -15,13 +15,12 @@ public class JwtUtil {
     private static Algorithm ALGORITHM = Algorithm.HMAC256(SECRET_KEY);
 
     public String create(String username, String role) {
-        System.out.println("Rol desde create JwtUtil" + role);
         return JWT.create()
                 .withSubject(username)
-                .withIssuer("GNIcoDev")
+                .withIssuer("GNicoDev")
                 .withClaim("role", role)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(15)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(1)))
                 .sign(ALGORITHM);
     }
 

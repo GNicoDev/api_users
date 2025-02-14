@@ -4,10 +4,11 @@ import com.users.service.dto.LoginDto;
 import com.users.web.config.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,21 +30,29 @@ public class AuthController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<?> login (@RequestBody LoginDto loginDto){
-        UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(),loginDto.getPassword());
-        Authentication authentication = authenticationManager.authenticate(login);
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+        try {
+            UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+            Authentication authentication = authenticationManager.authenticate(login);
 
-        System.out.println(authentication.isAuthenticated());
-        System.out.println(authentication.getPrincipal());
+            String role = authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst()
+                    .orElse("USER");
 
-        String role = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .findFirst()
-                .orElse("USER");
-        System.out.println("Desde authController login-> Role : " + role);
+            String jwt = jwtUtil.create(loginDto.getUsername(), role);
 
-        String jwt = jwtUtil.create(loginDto.getUsername(), role);
-
-        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        } catch (LockedException e) {
+            return ResponseEntity.status(HttpStatus.LOCKED).body("User account is locked");
+        } catch (DisabledException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User account is disabled");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
     }
 }

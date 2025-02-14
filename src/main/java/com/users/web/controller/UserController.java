@@ -22,12 +22,12 @@ public class UserController {
         return ResponseEntity.ok(userService.listAllUsers());
     }
 
-    @GetMapping("users/{email}")
-    public ResponseEntity<?> findUserByEmail(@PathVariable String email){
-        Optional<User> optionalUser = userService.findUserByEmail(email);
+    @GetMapping("users/{username}")
+    public ResponseEntity<?> findUserByUsername(@PathVariable String username){
+        Optional<User> optionalUser = userService.findUserByUsername(username);
         if (optionalUser.isPresent())
             return ResponseEntity.ok(optionalUser.get());
-        return ResponseEntity.badRequest().body("email not exist ");
+        return ResponseEntity.badRequest().body("username not exist ");
     }
 
     @PostMapping("users")
