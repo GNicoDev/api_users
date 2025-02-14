@@ -31,11 +31,13 @@ public class UserController {
     }
 
     @PostMapping("users")
-    public ResponseEntity<?> createNewUser (@RequestBody User user) throws URISyntaxException {
+    public ResponseEntity<?> createNewUser(@RequestBody User user) throws URISyntaxException {
         Optional<User> optionalUser = userService.createUser(user);
-        if (optionalUser.isPresent())
-            return ResponseEntity.created(new URI("api/users/create")).build();
-        return ResponseEntity.notFound().build();
+
+        if (optionalUser.isPresent()) {
+            return ResponseEntity.created(new URI("api/users")).body(optionalUser.get());
+        }
+        return ResponseEntity.status(409).body("User with this username already exists");
     }
 
     @PutMapping("users/{id}")

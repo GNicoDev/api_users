@@ -23,11 +23,11 @@ public class User {
     @Column(unique = true,nullable = false,length = 30)
     private String email;
 
-    @Column(nullable = false)
-    private Boolean locked;
+    @Column(nullable = true)
+    private Boolean locked = false;
 
-    @Column(nullable = false)
-    private Boolean disabled;
+    @Column(nullable = true)
+    private Boolean disabled = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

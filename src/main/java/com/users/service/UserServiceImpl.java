@@ -3,6 +3,7 @@ package com.users.service;
 import com.users.entity.User;
 import com.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<User> createUser(User user) {
+        if (userRepository.findByUserName(user.getUserName()).isPresent()) {
+            return Optional.empty();
+        }
+
         String hashedPassword = userSecurityService.hashPassword(user.getPassword());
         user.setPassword(hashedPassword);
         return Optional.of(userRepository.save(user));
