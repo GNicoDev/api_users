@@ -31,28 +31,16 @@ public class AuthController {
 
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
-        try {
-            UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
-            Authentication authentication = authenticationManager.authenticate(login);
+        UsernamePasswordAuthenticationToken login = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+        Authentication authentication = authenticationManager.authenticate(login);
 
-            String role = authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .findFirst()
-                    .orElse("USER");
+        String role = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst()
+                .orElse("USER");
 
-            String jwt = jwtUtil.create(loginDto.getUsername(), role);
+        String jwt = jwtUtil.create(loginDto.getUsername(), role);
 
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
-        } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-        } catch (LockedException e) {
-            return ResponseEntity.status(HttpStatus.LOCKED).body("User account is locked");
-        } catch (DisabledException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User account is disabled");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
-        }
+        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, jwt).build();
     }
 }

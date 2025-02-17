@@ -1,0 +1,1 @@
+INSERT INTO `users`(`disabled`, `locked`, `user_name`, `email`, `password`, `role`) VALUES (0,0,'admin','admin@apiuser.com','$2y$10$RUTFbAAl9tfU5ypAy3rEju4i79g6.dXhxfriT/gRTowlBeAj/qGiO','ADMIN')
