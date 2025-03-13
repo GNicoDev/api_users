@@ -60,4 +60,28 @@ To get started with the project, follow these steps:
    ```
    mvn spring-boot:run
 
+## Usage
+
+To test the API, use a tool like Postman or cURL to send requests to the endpoints. Below are some example endpoints:
+
+>### Endpoints
+
+| Method | Endpoint                  | Description                              | Request Body Example                      | Success Response Example                  | Error Codes                              | Access          |
+|--------|----------------------------|------------------------------------------|-------------------------------------------|-------------------------------------------|-------------------------------------------|-----------------|
+| POST   | /auth/login                | Authenticate user and get JWT token      | ```json {"username": "user", "password": "pass"}``` | 200 OK, {...}                             | 401 Unauthorized                          | PUBLIC          |
+| GET    | /users                     | Get all users                            | N/A                                       | 200 OK, [{...}, {...}]                    | N/A                                       | ADMIN           |
+| GET    | /users/{username}          | Get a user by username                   | N/A                                       | 200 OK, {...}                             | 404 Not Found                             | USER            |
+| POST   | /users                     | Create a new user                        | ```json {"userName": "user", "password": "user123", "email": "user@gmail.com", "role": "USER"}``` | 201 Created, {...}                        | 400 Bad Request, 409 Conflict             | ADMIN           |
+| PUT    | /users/{username}          | Update user details                      | ```json {"userName": "user", "password": "user123", "email": "user@gmail.com", "role": "USER", "locked": false, "disabled": true}``` | 200 OK, {...}                             | 400 Bad Request, 404 Not Found, 409 Conflict | ADMIN           |
+| DELETE | /users/{username}          | Delete a user                            | N/A                                       | 200 OK                                    | 404 Not Found                             | ADMIN           |
+
+
+## Key Features
+
+- **JWT Authentication:** Securely authenticate users using JSON Web Tokens.
+
+- **Spring Security Integration:** Leverage Spring Security to handle authentication and authorization.
+
+- **User Role Management:** Demonstrates different levels of access (ADMIN and USER) to endpoints in the API.
+
 
