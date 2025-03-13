@@ -21,6 +21,12 @@ There are two user accounts to demonstrate the different levels of access to the
 - **ADMIN:** Can access all requests.
 - **USER:** Can only access GET type requests.
 
+## Table of Contents
+
+1. [Installation](#installation)
+2. [Usage](#usage)
+3. [Key Features](#key-features)
+
 ## Installation
 
 To get started with the project, follow these steps:
